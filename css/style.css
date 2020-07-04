@@ -1,0 +1,45 @@
+
+div > ::slotted(:not([selected])) {
+    display: none;
+}
+    
+.prevBtn, .nextBtn {
+   position: absolute;
+  top: calc(50% - 20px);
+  padding: 0;
+  line-height: 40px;
+  border: none;
+  background: none;
+  color: #DDD;
+  font-size: 40px;
+  font-weight: bold;
+  opacity: 0.7;
+}
+    
+.prevBtn:hover, .nextBtn:hover,
+.prevBtn:focus, .nextBtn:focus {
+  opacity: 1;
+}
+    
+#prevBtn {
+  left: 12px;
+}
+    
+#nextBtn {
+  right: 12px;
+}
+    
+.prevBtn, .nextBtn[disabled] {
+ opacity: 0.4;
+}
+
+carousel-app,
+carousel-app img {
+  width: 400px;
+  height: 300px;
+}  
+
+img {
+  width: 20px;
+  height: 30px;
+}  

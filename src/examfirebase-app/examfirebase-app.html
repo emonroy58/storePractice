@@ -1,0 +1,214 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="./store.html">
+<link rel="import" href="./carousel.html">
+<link rel="import" href="./appkey.html">
+
+
+
+<dom-module id="examfirebase-app">  
+  
+  <template>  
+    <link rel="stylesheet" href="../../css/style.css"> 
+    <link rel="stylesheet" href="../../css/style-card.css"> 
+    
+     <template class="card-int" is="dom-repeat" items="[[products]]" as="item" >        
+       <div class="card">
+         <div class="card-image" style="background: url({{item.url}})">
+            <img src="" alt="" style="background: url({{item.url}})">
+          </div>
+          <div class="card-price">
+            <span class="price">Precio: $ {{item.precio}}.00</span> 
+            <p class="description">Descripcion: {{item.description}}</p>  
+          </div>
+          <div class="card-text"> 
+            <button id="compra-product" on-click="_agregarCompra" value="{{item.id}}" >Agregar</button> 
+          </div>           
+
+       </div> 
+    </template>       
+   
+
+    
+    <div class="container-carrito">      
+      <div class="header">        
+        <h2>Carrito de compras</h2>
+      </div>  
+       
+        <template is="dom-repeat" items="[[comprasResult]]" as="item" >             
+          <store-app description="{{item.description}}">
+
+          </store-app>
+          <div>            
+            <img src="{{item.url}}" alt="" >
+          </div>  
+          <div>
+            <p>Descripcion: {{item.description}}</p>  
+          </div>  
+          <div>
+            <p>Precio: ${{item.precio}}.00</p>  
+            
+          </div>  
+          <div>            
+            <button id="increment" on-click="_countIncrement">+</button>  
+            <paper-input>{{countIncre}}</paper-input> 
+            <button id="increment" on-click="_countDecrement">-</button> 
+          </div>
+     
+        </template> 
+        
+        <div class="header">        
+          <h2>Total: ${{total}}.00</h2>
+        </div>
+
+    </div> 
+  </store-app>   
+    
+            
+  
+  </template>
+  
+  <script >
+
+   
+    /**
+     * @customElement
+     * @polymer
+     */
+    class ExamfirebaseApp extends Polymer.Element {
+      static get is() {return 'examfirebase-app';}
+      static get properties() {
+        return {
+          countIncre: {
+            type:Number,
+            value: 1
+          }, 
+          total: parseFloat,
+          image: String,
+          description : String,
+          precio: String,
+          comprasResult: {
+            type: Array,
+            observer: function(change){
+                if(change){ 
+                  return this.comprasResult = this.comprasResult;
+                }              
+              }        
+          },
+          products:{
+            type: Array ,   
+             observer: function(change){
+                if(change){
+                  this.products = this.products;
+                  console.log('this', this.products);                  
+                }              
+              }              
+             
+           }, 
+
+          ready(){
+            super.ready();
+            
+            var store = new Store(description, precio)
+            
+            this.$.compra-product.addEvenListener('click', element => {
+              
+                this._agregarCompra(element)                
+            });          
+            
+          } 
+
+        };    
+        
+      }     
+     
+     
+           
+    constructor() {
+        super();              
+        this.comprasResult = [];
+        this.products = [];
+        this.total = 0;
+        this.getProducts();    
+        this.carrito(); 
+        
+                    
+     }
+      
+  
+      getProducts(){          
+          db.collection("cameras").get()
+            .then(snapshot =>{
+              var products = [];
+              
+              snapshot.forEach(doc =>{
+                products.push(doc.data());
+              })            
+              this.products = products;
+             // console.log('Productos',this.products); 
+                                         
+            }).catch(err=> console.log(err));          
+        }
+
+      _agregarCompra(element)  {
+          
+        this.products = this.products;
+        console.log('En add',this.products);
+        
+       var idCompra = element.target.attributes['value'].value;
+        console.log(idCompra); 
+       
+        var compra = this.products.filter(function (product) { return product.id == idCompra; });               
+        this.carrito(compra);
+      }
+
+      carrito(compra){
+        
+        var compras = compra;        
+        //console.log('Compras', compras);
+        
+        for (const key in compras) {
+          if (compras.hasOwnProperty(key)) {
+            const element = compras[key];
+            //console.log(element);
+            this.push('comprasResult',element) ;
+            this.total = (element.precio) + this.total;
+            
+          }
+        }        
+      //console.log('Compras---',this.comprasResult);
+      console.log('total---',this.total);
+
+      }
+
+     
+
+      _countIncrement(){
+         var count = this.countIncre;
+          count++;  
+          this.countIncre = count;       
+          this.total =  this.total * this.countIncre ;
+
+      }   
+
+      _countDecrement(){
+         var count = this.countIncre;
+          count--;          
+         this.countIncre = count;   
+             
+      } 
+     
+    }
+
+
+
+
+    window.customElements.define(ExamfirebaseApp.is, ExamfirebaseApp);
+  </script>
+
+
+
+
+
+
+</dom-module>

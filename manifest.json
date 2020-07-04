@@ -1,0 +1,6 @@
+{
+  "name": "examfirebase",
+  "short_name": "examfirebase",
+  "start_url": "/",
+  "display": "standalone"
+}

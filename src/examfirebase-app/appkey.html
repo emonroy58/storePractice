@@ -1,0 +1,74 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+/*
+<dom-module id="key-firebase">
+    <template>
+        <style>
+            :host {
+                display: block
+            }
+        </style>
+
+        
+
+    </template>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"> </script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"> </script>
+
+    <script>
+       
+        class KeyFirebase extends Polymer.Element {
+            /**
+             * String providing the tag name to register the element under.
+             */
+            static get is() {
+                return 'key-firebase';
+            }
+
+            /**
+             * Object describing property-related metadata used by Polymer features
+             */
+            static get properties() {
+                return {
+                    
+                };
+            }
+
+            /**
+             * Instance of the element is created/upgraded. Use: initializing state,
+             * set up event listeners, create shadow dom.
+             * @constructor
+             */
+            constructor() {
+                super();
+            }
+
+            /**
+             * Use for one-time configuration of your component after local DOM is initialized. 
+             */
+            ready() {
+                super.ready();
+
+                Polymer.RenderStatus.afterNextRender(this, function() {
+                    
+                });
+            }
+
+        }
+
+        var firebaseConfig = {
+        apiKey: "AIzaSyC2QJ4TDHyTGBrQ-Bh6ErzOJ6EmdNonXE4",
+        authDomain: "baseejemplo-d5a00.firebaseapp.com",
+        databaseURL: "https://baseejemplo-d5a00.firebaseio.com",
+        projectId: "baseejemplo-d5a00",
+        storageBucket: "baseejemplo-d5a00.appspot.com",
+        messagingSenderId: "800240126956",
+        appId: "1:800240126956:web:1861da9bf6ac2825bf4ec9"
+      };
+      
+      firebase.initializeApp(firebaseConfig);
+      var db = firebase.firestore() 
+
+        window.customElements.define(KeyFirebase.is, KeyFirebase);
+    </script>
+</dom-module>

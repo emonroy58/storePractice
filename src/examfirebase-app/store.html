@@ -1,0 +1,52 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="examfirebase-app.html">
+
+<dom-module id="store-app">
+    <template>
+        <style>
+            :host {
+                display: block
+            }
+        </style>
+        
+         <template is="dom-repeat" items="{{comprasResult}}" as="item" >             
+           
+             
+              <p>Descripcion: {{description}}</p>  
+               
+             
+          </template>
+        
+
+    </template>
+
+    <script>
+       
+        class StoreAppCameras extends Polymer.Element {
+            
+            static get is() {
+                return 'store-app';           }
+
+            
+            static get properties() {
+                return {
+                    image: String,
+                    description : String,
+                    precio: String,
+                    comprasResult :{
+                        type: Array,
+                        //notify: true
+                    } 
+                };
+            }
+
+            constructor() {
+                super();
+            }
+
+        }
+
+        window.customElements.define(StoreAppCameras.is, StoreAppCameras);
+    </script>
+</dom-module>

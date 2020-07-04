@@ -1,0 +1,100 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="element-mixin.html">
+
+<dom-module id="carousel-app">
+  <template>
+    <link rel="stylesheet" href="../../css/style.css">   
+
+      <div>
+        <slot>
+          
+        </slot>
+      </div>
+      
+      <button class="prevBtn" id="prevBtn" on-click="previous">&#x276E;</button>
+      <button class="nextBtn" id="nextBtn" on-click="next">&#x276F;</button>
+    
+  </template>
+
+  <script>
+    const MyMixin = superclass => class extends superclass {
+      static get properties() {
+        return {
+          selected: {
+            type: Object,
+            observer: '_selectedChanged'
+          }
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+
+        this.shadowRoot.addEventListener('slotchange', this._resetSelected.bind(this));
+        this._resetSelected();
+      }
+
+      
+      _selectedChanged(selected, oldSelected) {
+        if (oldSelected) oldSelected.removeAttribute('selected');
+        if (selected) selected.setAttribute('selected', '');
+      }
+
+      _resetSelected() {
+        if (!this.selected || this.selected.parentElement !== this) {
+          this.selected = this.firstElementChild;
+        }
+      }
+    };
+  </script>
+
+  <script>
+
+    // Extend Polymer.Element base class
+    class MyCarousel extends MyMixin(Polymer.Element) {
+
+      static get is() { return 'carousel-app' }
+
+      _selectedChanged(selected, oldSelected) {
+        super._selectedChanged(selected, oldSelected);
+
+        if (selected) {
+          this.$.prevBtn.disabled = !selected.previousElementSibling;
+          this.$.nextBtn.disabled = !selected.nextElementSibling;
+
+          this._loadImage(selected);
+          this._loadImage(selected.previousElementSibling);
+          this._loadImage(selected.nextElementSibling);
+        } else {
+          this.$.prevBtn.disabled = true;
+          this.$.nextBtn.disabled = true;
+        }
+      }
+
+      previous() {
+        const elem = this.selected && this.selected.previousElementSibling;
+        if (elem) {
+          this.selected = elem;
+        }
+      }
+
+      next() {
+        const elem = this.selected && this.selected.nextElementSibling;
+        if (elem) {
+          this.selected = elem;
+        }
+      }
+
+      _loadImage(img) {
+      if (img && !img.src) {
+        img.src = img.getAttribute('data-src');
+      }
+}
+
+    }
+
+    // Register custom element definition using standard platform API
+    customElements.define(MyCarousel.is, MyCarousel);
+
+  </script>
+</dom-module>
